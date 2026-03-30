@@ -1,235 +1,808 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Praveen</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Praveen Kumar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0a08;
+    --bg2: #111110;
+    --bg3: #1a1a18;
+    --line: #2a2a28;
+    --muted: #4a4a46;
+    --secondary: #8a8a84;
+    --primary: #d4d4cc;
+    --accent: #c8b560;
+    --accent2: #7eb89a;
+    --white: #f0f0e8;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--primary);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* grain overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 20px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.3s, background 0.3s;
+  }
+
+  nav.scrolled {
+    background: rgba(10,10,8,0.92);
+    border-bottom-color: var(--line);
+    backdrop-filter: blur(12px);
+  }
+
+  .nav-logo {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--primary); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 120px 48px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -200px;
+    right: -200px;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(200,181,96,0.04) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.2s;
+  }
+
+  .hero-name {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(52px, 8vw, 96px);
+    color: var(--white);
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.35s;
+  }
+
+  .hero-name em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .hero-philosophy {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(18px, 2.5vw, 26px);
+    color: var(--secondary);
+    font-style: italic;
+    margin-top: 24px;
+    max-width: 680px;
+    line-height: 1.5;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.5s;
+  }
+
+  .hero-philosophy strong {
+    color: var(--primary);
+    font-style: normal;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 400;
+  }
+
+  .hero-meta {
+    display: flex;
+    gap: 32px;
+    margin-top: 48px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.65s;
+  }
+
+  .hero-meta-item {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+  }
+
+  .hero-meta-item span {
+    display: block;
+    color: var(--accent2);
+    font-size: 13px;
+    margin-bottom: 2px;
+  }
+
+  .hero-scroll {
+    position: absolute;
+    bottom: 40px;
+    left: 48px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 1s;
+  }
+
+  .hero-scroll::after {
+    content: '';
+    display: block;
+    width: 48px;
+    height: 1px;
+    background: var(--muted);
+  }
+
+  /* SECTIONS */
+  section {
+    padding: 100px 48px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 48px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+    max-width: 200px;
+  }
+
+  /* WORK */
+  .work-list { display: flex; flex-direction: column; gap: 0; }
+
+  .work-item {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 0 48px;
+    padding: 40px 0;
+    border-bottom: 1px solid var(--line);
+    transition: background 0.2s;
+    position: relative;
+  }
+
+  .work-item:first-child { border-top: 1px solid var(--line); }
+
+  .work-item:hover .work-company { color: var(--accent); }
+
+  .work-left { padding-top: 4px; }
+
+  .work-period {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+    margin-bottom: 8px;
+  }
+
+  .work-company {
+    font-family: 'Instrument Serif', serif;
+    font-size: 20px;
+    color: var(--primary);
+    transition: color 0.2s;
+    margin-bottom: 4px;
+  }
+
+  .work-role {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .work-right {}
+
+  .work-context {
+    font-size: 13px;
+    color: var(--secondary);
+    margin-bottom: 16px;
+    font-style: italic;
+  }
+
+  .work-points {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .work-points li {
+    font-size: 14px;
+    color: var(--primary);
+    padding-left: 20px;
+    position: relative;
+    line-height: 1.6;
+  }
+
+  .work-points li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+  }
+
+  .work-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 20px;
+  }
+
+  .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    padding: 3px 10px;
+    letter-spacing: 0.06em;
+    border-radius: 2px;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .tag:hover { color: var(--accent2); border-color: var(--accent2); }
+
+  /* WRITING */
+  .writing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+
+  .writing-card {
+    background: var(--bg);
+    padding: 32px 28px;
+    text-decoration: none;
+    transition: background 0.2s;
+    display: block;
+  }
+
+  .writing-card:hover { background: var(--bg3); }
+
+  .writing-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+
+  .writing-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: 19px;
+    color: var(--white);
+    line-height: 1.35;
+    margin-bottom: 12px;
+  }
+
+  .writing-desc {
+    font-size: 13px;
+    color: var(--secondary);
+    line-height: 1.6;
+  }
+
+  .writing-arrow {
+    margin-top: 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+  }
+
+  /* TIMELINE */
+  .timeline {
+    position: relative;
+    padding-left: 32px;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 8px;
+    bottom: 8px;
+    width: 1px;
+    background: var(--line);
+  }
+
+  .timeline-item {
+    position: relative;
+    padding-bottom: 40px;
+  }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -36px;
+    top: 8px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 1px solid var(--muted);
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .timeline-item:hover::before {
+    border-color: var(--accent);
+    background: var(--accent);
+  }
+
+  .timeline-year {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+
+  .timeline-event {
+    font-size: 15px;
+    color: var(--primary);
+    margin-bottom: 4px;
+  }
+
+  .timeline-detail {
+    font-size: 13px;
+    color: var(--secondary);
+  }
+
+  /* CONTACT */
+  .contact-block {
+    border: 1px solid var(--line);
+    padding: 64px 56px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .contact-block::before {
+    content: '';
+    position: absolute;
+    top: -100px;
+    left: -100px;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(200,181,96,0.04) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .contact-heading {
+    font-family: 'Instrument Serif', serif;
+    font-size: clamp(32px, 5vw, 56px);
+    color: var(--white);
+    line-height: 1.1;
+    margin-bottom: 24px;
+  }
+
+  .contact-heading em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .contact-sub {
+    font-size: 15px;
+    color: var(--secondary);
+    max-width: 520px;
+    margin-bottom: 40px;
+    line-height: 1.7;
+  }
+
+  .contact-links {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .contact-link {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--primary);
+    text-decoration: none;
+    border: 1px solid var(--line);
+    padding: 12px 24px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: border-color 0.2s, color 0.2s, background 0.2s;
+  }
+
+  .contact-link:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(200,181,96,0.04);
+  }
+
+  .contact-link.primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--bg);
+  }
+
+  .contact-link.primary:hover {
+    background: transparent;
+    color: var(--accent);
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 32px 48px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  footer p {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--line); }
+  ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    .hero { padding: 100px 24px 60px; }
+    section { padding: 72px 24px; }
+    .work-item { grid-template-columns: 1fr; gap: 16px; }
+    .writing-grid { grid-template-columns: 1fr; }
+    .contact-block { padding: 40px 28px; }
+    footer { padding: 24px; flex-direction: column; gap: 8px; text-align: center; }
+  }
+</style>
 </head>
 <body>
-    <div class="d-flex justify-content-center align-items-center flex-direction-column hero">
-    <h1>Praveen Kumar</h1>
-    <h4>Full Stack - Backend Focused Developer, Self-Taught, Proactive Engineer</h4>
-        <!-- <div> -->
-            <ul class="ul-inline d-flex justify-content-center align-items-center" style="padding: 1px;">
-                <li class="icons-spacing" style="list-style-type: none;">
-                    <a href="https://www.linkedin.com/in/praveenkumar97/">
-                        <img class="stylized-icons" src="icons/linkedin.png" />
-                    </a>
-                </li>
-                <li class="icons-spacing" style="list-style-type: none;">
-                    <a href="tel:+919078989262">
-                        <img class="stylized-icons" src="icons/call.png" />
-                    </a>
-                </li>
-                <li class="icons-spacing" style="list-style-type: none;">
-                    <a href="mailto:incopraveen@gmail.com">
-                        <img class="stylized-icons" src="icons/email.png" />
-                    </a>
-                </li>
-            </ul>
-        <!-- </div> -->
-        <!-- <i style="text-align: center;">(Hover over dotted lines to know more)</i> -->
-        <!-- &nbsp; -->
-        <select name="goToMenu" id="goToSelector" style="width: fit-content; margin: auto;">
-            <option value="">GoTo</option> 
-            <option value="goto-who">🙋Who</option> 
-            <option value="goto-what">❓What</option> 
-            <option value="goto-fun">😎Fun</option> 
-            <option value="goto-skills">🍳Skills</option>
-        </select>
-    </div>
-    &nbsp;
-    <div class="d-flex justify-content-center align-items-center flex-direction-column" style="justify-content: space-evenly;">
-    <h6 id="goto-who">THE WHO 🙋</h6>
-    <div class="d-flex justify-content-left">
-        <ul>
-            <li>
-                <p class="dotted-dash" id="my_journey">Coder since 2015 (The Journey)</p>
-                <ul id="the_who">
-                    <li>
-                        <p>Found the burning desire to learn coding at the age of 13 after knowing games are created using programming languages</p>
-                    </li>
-                    <!-- Journey section -->
-                   <li>
-                        <p>Luckily, got introduced to HTML the same year at school</p>
-                    </li>
-                    <li>
-                        <p>Spent months learning how to build websites</p>
-                    </li>
-                    <li>
-                        <p>Opted Computer Science in High School to learn C++</p>
-                    </li>
-                    <li>
-                        <p>Self-taught Wordpress, jQuery, CSS, PHP, MYSQL</p>
-                    </li>
-                    <li>
-                        <p>Moved to College; had fun building web apps for friends' hustle, university fest, and worked on 2 crazy litle ideas</p>
-                    </li>
-                    <li>
-                        <p>Went full-time freelancing during pandemic and self-taught MERN stack</p>
-                    </li>
-                    <li>
-                        <p>Got placed full-time at a software consulting startup</p>
-                    </li>
-                </ul>
-            </li>
-            &nbsp;
-            <li>
-                <p class="dotted-dash" id="my_journey_2">2+ years of professional / industry experience</p>
-                <ul id="the_who_2">
-                    <li>
-                        <p>As a freelancer, delivered 7+ projects across stacks - Wordpress, PHP, JS, jQuery, MySQL</p>
-                    </li>
-                    <li>
-                        <p>Closed a 1 Year AMC with a Kuwait-based fashion store</p>
-                    </li>
-                    <li>
-                        <p>Consulted as Full-time associate software engineer for SaaS Spends Management product client</p>
-                    </li>
-                </ul>
-            </li>
-        </ul>
-    </div>
 
-    <h6 id="goto-what">THE WHAT ❓</h6>
-    <ul style="line-height: 1.5em;">
-    <li>
-        <p>Demonstrated Abilities</p>
-        <ul>
-            <li class="dotted-dash" id="what_1">During Full Time</li>
-                <ul id="the_what_1">
-                    <li>
-                        <p>Self taught MDM solutions - Kandji, Jamf, Jumpcloud, Intune to understand application packaging, management, deployment</p>
-                    </li>
-                    <li>
-                        <p>Designed solution to achieve automated installations, updates, configuration setup, removal of app using Bash & Powershell script</p>
-                    </li>
-                    <li>
-                        <p>Established connection between native app and browser extension for seamless authentication using Node server</p>
-                    </li>
-                    <li>
-                        <p>Spearheaded feature designs that led to increased adaptation and visibility of the agents software</p>
-                    </li>
-                    <li>
-                        <p>Ensured seamless collaboration, mentorship, and brainstorming sessions with my teammate to achieve the sprint goals</p>
-                    </li>
-                    <li>
-                        <p>Diagnosed and resolved MacOS/Windows issues for business users during onboarding stage</p>
-                    </li>
-                    <li>
-                        <p>Refactored cluttered codebase to organized, maintainable, adhering to SRP, DRY principles</p>
-                    </li>
-                </ul>
-            </li>
-        </ul>
-        &nbsp;
-        <ul>
-            <li class="dotted-dash" id="what_2">During Freelance</li>
-                <ul id="the_what_2">
-                    <li>
-                        <p>Ensured robustness and stability of a psychologist appointment platform and added new features to increase usability</p>
-                    </li>
-                    <li>
-                        <p>Customized & Connected woocommerce store with offline POS system for showroom sales and billing</p>
-                    </li>
-                    <li>
-                        <p>Ensured durable functioning of e-commerce store and POS system during spiked usage during peak seasons</p>
-                    </li>
-                    <li>
-                        <p>Hired 4 full stack developers and oversaw the development and maintenance of projects</p>
-                    </li>
-                </ul>
-            </li>
-        </ul>
-        &nbsp;
-        <ul>
-            <li class="dotted-dash" id="what_3">Varsity years</li>
-                <ul id="the_what_3">
-                    <li>
-                        <p>Built registration platform for Varsity Annual Fest inviting participants over 34+ colleges across 10+ cities<a target="_blank" href="https://web.archive.org/web/20180114075104/http:/ssu-orion.com/sports/index.php">(Link)</a></p>
-                    </li>
-                    <li>
-                        <p>Facilitated event organizers to keep in touch with participants by building an admin page for backend use case</p>
-                    </li>
-                    <li>
-                        <p>Developed and Maintained a PHP booking app for a friend's self driving rental car service</p>
-                    </li>
-                    <li>
-                        <p>Started up a talent networking app allowing learners and teachers to connect and share knowledge; built the backend and Database for the product.</p>
-                    </li>
-                    <li>
-                        <p>Hired 2 interns for front end development and demonstrated teamwork to finish MVP before deadline.</p>
-                    </li>
-                </ul>
-            </li>
-        </ul>
-    </li>
-    </ul>
-    <h6 id="goto-fun">THE FUN 😎</h6>
-    <ul style="line-height: 1em;">
-    <li>
-        <p class="dotted-dash" id="fun_1">Star Wars</p>
-        <ul id="the_fun_1">
-            <li>
-                <p>Made peace with both The Light and The Dark side of Coding 💙❤️</p>
-            </li>
-            <li>
-                <p>Want to someday build a starship and go to the far corners of The Milky Way Galaxy 🛸🌌</p>
-            </li>
-        </ul>
-    </li>
-    <li>
-        <p class="dotted-dash" id="fun_2">Desire to create and build</p>
-        <ul id="the_fun_2"><li>When I was 10, got inspired by Genseishin series & Power Rangers, to build robots 🤖</li></ul>
-    </li>
-    <li>
-        <p class="dotted-dash" id="fun_3">Jack of all trades, master of none; but often better than the master of one ♦️</p>
-        <ul id="the_fun_3">
-            <li>Tried hands &amp; feet on many somethings - from 
-                <span><u class="dotted-dash" title="Wasn't that much into sports, liked being a geek!">sports</u></span>
-                to dance, writing to marketing, volunteering to entrepreneurship</li>
-        </ul>
-    </li>
-    </ul>
+<nav id="nav">
+  <a href="#" class="nav-logo">pk —</a>
+  <ul class="nav-links">
+    <li><a href="#work">Work</a></li>
+    <li><a href="#writing">Writing</a></li>
+    <li><a href="#origin">Origin</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <p class="hero-tag">Praveen Kumar — Platform & Systems Engineer</p>
+  <h1 class="hero-name">Every component<br>must <em>earn</em> its place.</h1>
+  <p class="hero-philosophy">
+    I build systems from first principles.<br>
+    <strong>Before I write a line of code, I ask why the component exists —<br>and what happens to the whole if it doesn't.</strong>
+  </p>
+  <div class="hero-meta">
+    <div class="hero-meta-item">
+      <span>8+</span>
+      years building
+    </div>
+    <div class="hero-meta-item">
+      <span>~1M</span>
+      events/day shipped
+    </div>
+    <div class="hero-meta-item">
+      <span>6→</span>
+      hours to 15 min MTTR
+    </div>
+    <div class="hero-meta-item">
+      <span>700+</span>
+      iCreate applicants, selected
+    </div>
+  </div>
+  <p class="hero-scroll">scroll</p>
 </div>
-&nbsp;
-    <h6 id="goto-skills" style="text-align: center;">SKILLS 🍳</h6>
-    <ul class="list-style-none d-flex justify-content-center flex-direction-row" style="gap: 5em;" >
-    <li>
-        <p><u>Front End</u></p>
-        <ul>
-            <li>ReactJS</li>
-            <li>Redux/Redux Toolkit</li>
-            <li>jQuery</li>
-            <li>HTML5 & CSS</li>
-        </ul>
-    </li>
-    <li>
-        <p><u>Back End</u></p>
-        <ul>
-            <li>NodeJS</li>
-            <li>ExpressJS</li>
-            <li>PHP</li>
-        </ul>
-    </li>
-    <li>
-        <p><u>Database</u></p>
-        <ul>
-            <li>MySQL</li>
-            <li>MongoDB</li>
-        </ul>
-    </li>
-</ul>
 
+<!-- WORK -->
+<section id="work">
+  <p class="section-label reveal">Selected work</p>
+  <div class="work-list">
 
-    <footer class="d-flex justify-content-center align-items-center">
-        Portfolio 2024
-    </footer>
-    <!-- script just before body tag for SEO purpose -->
-    <script src="script.js"></script>
+    <div class="work-item reveal">
+      <div class="work-left">
+        <p class="work-period">2024 — 2025</p>
+        <p class="work-company">Taho by Opnbook</p>
+        <p class="work-role">Platform Engineer</p>
+      </div>
+      <div class="work-right">
+        <p class="work-context">AI governance platform — a controlled desktop browser + analytics dashboard helping organisations measure and govern LLM usage. Core team. CTO collaboration.</p>
+        <ul class="work-points">
+          <li>Built the core data capture engine using Chrome DevTools Protocol — LLM conversations intercepted, processed through a four-stage classification pipeline, stored to MongoDB</li>
+          <li>Engineered tabbed session architecture with isolated per-tab session partitions and full state preservation on switch</li>
+          <li>Cut release cycle from 30–45 min to 13 min via shell scripts + GitHub Actions CI/CD</li>
+          <li>Config-driven AI provider runtime — ChatGPT, Claude, Meta AI onboarded via JSON config; MVP shipped before deadline</li>
+        </ul>
+        <div class="work-tags">
+          <span class="tag">ElectronJS</span>
+          <span class="tag">Node.js</span>
+          <span class="tag">CDP</span>
+          <span class="tag">AWS</span>
+          <span class="tag">GitHub Actions</span>
+          <span class="tag">MongoDB</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="work-item reveal">
+      <div class="work-left">
+        <p class="work-period">2022 — 2024</p>
+        <p class="work-company">Zluri</p>
+        <p class="work-role">Agent Systems Engineer</p>
+      </div>
+      <div class="work-right">
+        <p class="work-context">SaaS spend intelligence platform. Owned both desktop and browser agents — silent background processes streaming ~1M events/day to AWS Kinesis across 20 enterprise orgs including monday.com and Saltpay.</p>
+        <ul class="work-points">
+          <li>Replaced manual OTP login with device UUID + hashed org token via Auth0 — silent MDM deployment to thousands of devices simultaneously across Jamf, JumpCloud, Kandji, Intune</li>
+          <li>Cut customer MTTR from ~6 hours to 15–30 min by building a diagnostics window with exportable logs and a cache-flushing force-restart that re-authenticated via Auth0 cleanly</li>
+          <li>Cross-platform agent delivery — macOS, Windows, Ubuntu; PouchDB as local event store with Kinesis stream sync</li>
+        </ul>
+        <div class="work-tags">
+          <span class="tag">ElectronJS</span>
+          <span class="tag">osquery</span>
+          <span class="tag">PouchDB</span>
+          <span class="tag">AWS Kinesis</span>
+          <span class="tag">Auth0</span>
+          <span class="tag">MDM</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="work-item reveal">
+      <div class="work-left">
+        <p class="work-period">2017 — 2020</p>
+        <p class="work-company">Talspo</p>
+        <p class="work-role">Technical Co-founder</p>
+      </div>
+      <div class="work-right">
+        <p class="work-context">Hyper-local talent discovery — find a human teacher near you for any skill, via maps UI. Built solo from scratch. Selected from 700+ applicants at iCreate Ahmedabad, 2019.</p>
+        <ul class="work-points">
+          <li>Built entire platform solo — PHP/MySQL/jQuery backend, DB, and frontend — later architecting two full migrations to REST API and React PWA</li>
+          <li>Operated as sole technical decision-maker in a zero-resource environment; hired and mentored three interns</li>
+          <li>Selected from 700+ applicants at iCreate Ahmedabad — presented to industry leaders, underwent structured product mentorship</li>
+        </ul>
+        <div class="work-tags">
+          <span class="tag">PHP</span>
+          <span class="tag">MySQL</span>
+          <span class="tag">React</span>
+          <span class="tag">PWA</span>
+          <span class="tag">REST API</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- WRITING -->
+<section id="writing" style="background: var(--bg2); max-width: 100%; padding: 100px 48px;">
+  <div style="max-width: 1100px; margin: 0 auto;">
+    <p class="section-label reveal">Technical writing</p>
+    <div class="writing-grid reveal">
+      <a href="https://praveenkumar07.substack.com/p/how-i-built-a-browser-with-electron" target="_blank" class="writing-card">
+        <p class="writing-num">01</p>
+        <p class="writing-title">How I built a browser with Electron</p>
+        <p class="writing-desc">Building a controlled desktop browser from scratch — architecture decisions, WebView management, and session isolation.</p>
+        <p class="writing-arrow">Read →</p>
+      </a>
+      <a href="https://praveenkumar07.substack.com/p/breaking-the-web-carefully-request" target="_blank" class="writing-card">
+        <p class="writing-num">02</p>
+        <p class="writing-title">Breaking the web carefully — request interception</p>
+        <p class="writing-desc">How Chrome DevTools Protocol lets you intercept network requests and what you can do with the data you capture.</p>
+        <p class="writing-arrow">Read →</p>
+      </a>
+      <a href="https://praveenkumar07.substack.com/p/webview-to-database-building-a-reliable" target="_blank" class="writing-card">
+        <p class="writing-num">03</p>
+        <p class="writing-title">WebView to database — building a reliable pipeline</p>
+        <p class="writing-desc">The full data journey from intercepted LLM conversations to structured storage — sanitisation, normalisation, deduplication, classification.</p>
+        <p class="writing-arrow">Read →</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ORIGIN -->
+<section id="origin">
+  <p class="section-label reveal">Origin</p>
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start;">
+    <div class="reveal">
+      <p style="font-family: 'Instrument Serif', serif; font-size: 22px; color: var(--white); line-height: 1.5; margin-bottom: 24px;">
+        I didn't come from a CS degree.<br>I came from curiosity.
+      </p>
+      <p style="color: var(--secondary); font-size: 14px; line-height: 1.8; margin-bottom: 16px;">
+        Started with HTML at 13. Spent years building things before I knew what "software engineering" meant. Co-founded a startup at 20, built the entire stack solo, got selected from 700 applicants at a national incubator.
+      </p>
+      <p style="color: var(--secondary); font-size: 14px; line-height: 1.8; margin-bottom: 16px;">
+        Engineering, to me, is not a credential. It is a native human capacity — the same one that built aqueducts, calculated orbital mechanics by hand, and designed structures that stood for millennia without computers.
+      </p>
+      <p style="color: var(--secondary); font-size: 14px; line-height: 1.8;">
+        I try to live by the Unix philosophy: do one thing and do it well. Every system I touch, I ask — does every part earn its place?
+      </p>
+    </div>
+    <div class="timeline reveal">
+      <div class="timeline-item">
+        <p class="timeline-year">2015</p>
+        <p class="timeline-event">First line of HTML</p>
+        <p class="timeline-detail">Found out games are made with code. Never stopped.</p>
+      </div>
+      <div class="timeline-item">
+        <p class="timeline-year">2017</p>
+        <p class="timeline-event">Co-founded Talspo</p>
+        <p class="timeline-detail">Built hyper-local talent discovery platform solo from scratch.</p>
+      </div>
+      <div class="timeline-item">
+        <p class="timeline-year">2019</p>
+        <p class="timeline-event">iCreate Ahmedabad</p>
+        <p class="timeline-detail">Selected from 700+ applicants. Presented to industry leaders.</p>
+      </div>
+      <div class="timeline-item">
+        <p class="timeline-year">2022</p>
+        <p class="timeline-event">Joined Zluri via Akrity</p>
+        <p class="timeline-detail">Owned desktop + browser agents. ~1M events/day to Kinesis.</p>
+      </div>
+      <div class="timeline-item">
+        <p class="timeline-year">2024</p>
+        <p class="timeline-event">Core team at Opnbook</p>
+        <p class="timeline-detail">Built AI governance platform. Collaborated directly with CTO.</p>
+      </div>
+      <div class="timeline-item">
+        <p class="timeline-year">Now</p>
+        <p class="timeline-event">Open to product companies</p>
+        <p class="timeline-detail">India or remote. High stakes. Systems worth building carefully.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" style="max-width: 100%; padding: 0 48px 100px;">
+  <div style="max-width: 1100px; margin: 0 auto;">
+    <div class="contact-block reveal">
+      <h2 class="contact-heading">If the stakes are real,<br>let's <em>build something.</em></h2>
+      <p class="contact-sub">Looking for product companies — India or remote — where the engineering problems are worth solving carefully. Not chasing titles. Chasing systems that matter.</p>
+      <div class="contact-links">
+        <a href="mailto:incopraveen@gmail.com" class="contact-link primary">incopraveen@gmail.com</a>
+        <a href="https://www.linkedin.com/in/praveenkumar97/" target="_blank" class="contact-link">LinkedIn</a>
+        <a href="https://praveenkumar07.substack.com" target="_blank" class="contact-link">Substack</a>
+        <a href="tel:+919078989262" class="contact-link">+91-9078989262</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Praveen Kumar — Bengaluru, India</p>
+  <p>Built without unnecessary components.</p>
+</footer>
+
+<script>
+  // Nav scroll
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  // Reveal on scroll
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => {
+          entry.target.classList.add('visible');
+        }, 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  reveals.forEach(el => observer.observe(el));
+</script>
 </body>
 </html>
